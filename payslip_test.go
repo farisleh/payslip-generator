@@ -86,3 +86,28 @@ func TestPrintPayslip(t *testing.T) {
 	// Should not panic
 	PrintPayslip(data)
 }
+
+// TestPayslipWithDifferentStrategies demonstrates Strategy Pattern usage
+func TestPayslipWithDifferentStrategies(t *testing.T) {
+	employeeName := "Alice"
+	annualSalary := 60000.0
+
+	t.Run("Using Progressive Tax Strategy", func(t *testing.T) {
+		strategy := NewProgressiveTaxStrategy()
+		payslip := GenerateMonthlyPayslipWithStrategy(employeeName, annualSalary, strategy)
+
+		if !floatEquals(payslip.MonthlyIncomeTax, 500.00, 0.01) {
+			t.Errorf("Progressive: Monthly tax = %.2f; want 500.00", payslip.MonthlyIncomeTax)
+		}
+	})
+
+	t.Run("Using Flat Tax Strategy", func(t *testing.T) {
+		strategy := NewFlatTaxStrategy(0.15) // 15% flat tax
+		payslip := GenerateMonthlyPayslipWithStrategy(employeeName, annualSalary, strategy)
+
+		expectedMonthlyTax := (60000 * 0.15) / 12.0 // 750
+		if !floatEquals(payslip.MonthlyIncomeTax, expectedMonthlyTax, 0.01) {
+			t.Errorf("Flat: Monthly tax = %.2f; want %.2f", payslip.MonthlyIncomeTax, expectedMonthlyTax)
+		}
+	})
+}

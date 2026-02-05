@@ -79,3 +79,62 @@ func floatEquals(a, b, tolerance float64) bool {
 	}
 	return diff < tolerance
 }
+
+// TestTaxStrategyPattern tests the Strategy Pattern implementation
+func TestTaxStrategyPattern(t *testing.T) {
+	t.Run("Progressive Tax Strategy", func(t *testing.T) {
+		strategy := NewProgressiveTaxStrategy()
+		
+		// Test with 60000 salary
+		tax := strategy.CalculateAnnualTax(60000)
+		if !floatEquals(tax, 6000, 0.01) {
+			t.Errorf("Progressive strategy tax = %.2f; want 6000", tax)
+		}
+		
+		if strategy.GetName() != "Progressive Tax Strategy" {
+			t.Errorf("Strategy name = %s; want 'Progressive Tax Strategy'", strategy.GetName())
+		}
+	})
+	
+	t.Run("Flat Tax Strategy", func(t *testing.T) {
+		// 15% flat tax
+		strategy := NewFlatTaxStrategy(0.15)
+		
+		// Test with 60000 salary
+		tax := strategy.CalculateAnnualTax(60000)
+		expected := 60000 * 0.15 // 9000
+		if !floatEquals(tax, expected, 0.01) {
+			t.Errorf("Flat strategy tax = %.2f; want %.2f", tax, expected)
+		}
+		
+		if strategy.GetName() != "Flat Tax Strategy" {
+			t.Errorf("Strategy name = %s; want 'Flat Tax Strategy'", strategy.GetName())
+		}
+	})
+	
+	t.Run("Strategy Interchangeability", func(t *testing.T) {
+		salary := 100000.0
+		
+		// Use different strategies
+		progressive := NewProgressiveTaxStrategy()
+		flat := NewFlatTaxStrategy(0.20)
+		
+		progressiveTax := progressive.CalculateAnnualTax(salary)
+		flatTax := flat.CalculateAnnualTax(salary)
+		
+		// They should produce different results
+		if progressiveTax == flatTax {
+			t.Error("Different strategies should produce different results")
+		}
+		
+		// Progressive should be 16000 for 100k
+		if !floatEquals(progressiveTax, 16000, 0.01) {
+			t.Errorf("Progressive tax = %.2f; want 16000", progressiveTax)
+		}
+		
+		// Flat 20% should be 20000 for 100k
+		if !floatEquals(flatTax, 20000, 0.01) {
+			t.Errorf("Flat tax = %.2f; want 20000", flatTax)
+		}
+	})
+}

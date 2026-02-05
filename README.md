@@ -123,6 +123,31 @@ go test -v ./...
 
 ## Design Decisions
 
+### Strategy Pattern Implementation
+The project implements the **Strategy Pattern** for tax calculation (from [OODesign.com](https://www.oodesign.com/strategy-pattern.html)). This design pattern allows the tax calculation algorithm to be selected at runtime and makes it easy to add new tax calculation strategies without modifying existing code.
+
+**Benefits:**
+- **Extensibility**: Easy to add new tax strategies (e.g., regional taxes, flat taxes)
+- **Testability**: Each strategy can be tested independently
+- **Flexibility**: Switch between strategies at runtime
+- **Open/Closed Principle**: Open for extension, closed for modification
+
+**Implementation:**
+- `TaxStrategy` interface defines the contract for all tax strategies
+- `ProgressiveTaxStrategy` implements the current progressive tax system
+- `FlatTaxStrategy` demonstrates an alternative simple tax calculation
+- `GenerateMonthlyPayslipWithStrategy()` allows using any strategy
+
+**Example:**
+```go
+// Use default progressive tax
+payslip := GenerateMonthlyPayslip("Alice", 60000)
+
+// Use a custom flat tax strategy
+flatStrategy := NewFlatTaxStrategy(0.15) // 15% flat tax
+payslip := GenerateMonthlyPayslipWithStrategy("Bob", 60000, flatStrategy)
+```
+
 ### Extensible Tax Bracket System
 The tax computation uses a configurable slice of `TaxBracket` structs, making it easy to modify tax rates without changing the core logic. Simply update the `TaxBrackets` variable in `tax.go` to change the tax structure.
 
