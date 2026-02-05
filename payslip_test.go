@@ -6,12 +6,12 @@ import (
 
 func TestGenerateMonthlyPayslip(t *testing.T) {
 	tests := []struct {
-		name                      string
-		employeeName              string
-		annualSalary              float64
-		expectedGrossMonthly      float64
-		expectedMonthlyTax        float64
-		expectedNetMonthly        float64
+		name                 string
+		employeeName         string
+		annualSalary         float64
+		expectedGrossMonthly float64
+		expectedMonthlyTax   float64
+		expectedNetMonthly   float64
 	}{
 		{
 			name:                 "Sample case: Ren with 60000 salary",
@@ -50,21 +50,21 @@ func TestGenerateMonthlyPayslip(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := GenerateMonthlyPayslip(tt.employeeName, tt.annualSalary)
-			
+
 			if result.EmployeeName != tt.employeeName {
 				t.Errorf("EmployeeName = %s; want %s", result.EmployeeName, tt.employeeName)
 			}
-			
+
 			if !floatEquals(result.GrossMonthlyIncome, tt.expectedGrossMonthly, 0.01) {
 				t.Errorf("GrossMonthlyIncome = %.2f; want %.2f",
 					result.GrossMonthlyIncome, tt.expectedGrossMonthly)
 			}
-			
+
 			if !floatEquals(result.MonthlyIncomeTax, tt.expectedMonthlyTax, 0.01) {
 				t.Errorf("MonthlyIncomeTax = %.2f; want %.2f",
 					result.MonthlyIncomeTax, tt.expectedMonthlyTax)
 			}
-			
+
 			if !floatEquals(result.NetMonthlyIncome, tt.expectedNetMonthly, 0.01) {
 				t.Errorf("NetMonthlyIncome = %.2f; want %.2f",
 					result.NetMonthlyIncome, tt.expectedNetMonthly)
@@ -82,7 +82,7 @@ func TestPrintPayslip(t *testing.T) {
 		MonthlyIncomeTax:   500.00,
 		NetMonthlyIncome:   4500.00,
 	}
-	
+
 	// Should not panic
 	PrintPayslip(data)
 }

@@ -25,7 +25,7 @@ func ComputeAnnualTax(annualSalary float64) float64 {
 	}
 
 	totalTax := 0.0
-	
+
 	for _, bracket := range TaxBrackets {
 		// Skip if salary doesn't reach this bracket
 		if annualSalary < bracket.Min {
@@ -40,7 +40,7 @@ func ComputeAnnualTax(annualSalary float64) float64 {
 
 		// Calculate taxable amount in this bracket
 		taxableInBracket := upperBound - bracket.Min + 1
-		
+
 		// Calculate tax for this bracket
 		tax := taxableInBracket * bracket.Rate
 		totalTax += tax

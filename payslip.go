@@ -16,12 +16,12 @@ type PayslipData struct {
 func GenerateMonthlyPayslip(employeeName string, annualSalary float64) PayslipData {
 	// Calculate annual tax
 	annualTax := ComputeAnnualTax(annualSalary)
-	
+
 	// Convert to monthly values
 	grossMonthlyIncome := annualSalary / 12.0
 	monthlyIncomeTax := annualTax / 12.0
 	netMonthlyIncome := grossMonthlyIncome - monthlyIncomeTax
-	
+
 	return PayslipData{
 		EmployeeName:       employeeName,
 		GrossMonthlyIncome: grossMonthlyIncome,

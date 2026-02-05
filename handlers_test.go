@@ -13,14 +13,14 @@ import (
 
 func TestHandleGeneratePayslip(t *testing.T) {
 	tests := []struct {
-		name               string
-		requestBody        string
-		expectedStatus     int
+		name                 string
+		requestBody          string
+		expectedStatus       int
 		expectedEmployeeName string
-		expectedGross      string
-		expectedTax        string
-		expectedNet        string
-		expectError        bool
+		expectedGross        string
+		expectedTax          string
+		expectedNet          string
+		expectError          bool
 	}{
 		{
 			name: "Valid request - Ren with 60000",
@@ -82,7 +82,7 @@ func TestHandleGeneratePayslip(t *testing.T) {
 		},
 	}
 
-		for _, tt := range tests {
+	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Setup
 			e := echo.New()

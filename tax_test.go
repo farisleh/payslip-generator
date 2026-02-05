@@ -6,10 +6,10 @@ import (
 
 func TestComputeAnnualTax(t *testing.T) {
 	tests := []struct {
-		name          string
-		annualSalary  float64
-		expectedTax   float64
-		description   string
+		name         string
+		annualSalary float64
+		expectedTax  float64
+		description  string
 	}{
 		{
 			name:         "Sample 1: Annual Salary 60000",
