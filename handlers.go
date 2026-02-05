@@ -77,3 +77,24 @@ func HandleGeneratePayslip(c *echo.Context) error {
 	
 	return (*c).JSON(http.StatusOK, response)
 }
+
+// SalaryComputationsResponse represents the response body for GET /payslips
+type SalaryComputationsResponse struct {
+	SalaryComputations []SalaryComputationRecord `json:"salary_computations"`
+}
+
+// HandleGetSalaryComputations handles GET /payslips endpoint
+func HandleGetSalaryComputations(c *echo.Context) error {
+	records, err := GetAllSalaryComputations()
+	if err != nil {
+		return (*c).JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to retrieve salary computations",
+		})
+	}
+
+	response := SalaryComputationsResponse{
+		SalaryComputations: records,
+	}
+
+	return (*c).JSON(http.StatusOK, response)
+}
