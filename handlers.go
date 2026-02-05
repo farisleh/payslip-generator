@@ -64,5 +64,16 @@ func HandleGeneratePayslip(c *echo.Context) error {
 		NetMonthlyIncome:   fmt.Sprintf("%.2f", payslip.NetMonthlyIncome),
 	}
 	
+	// Save to database
+	err = SaveSalaryComputation(
+		req.EmployeeName,
+		req.AnnualSalary,
+		response.MonthlyIncomeTax,
+	)
+	if err != nil {
+		// Log error but don't fail the request
+		(*c).Logger().Error("Failed to save to database", "error", err)
+	}
+	
 	return (*c).JSON(http.StatusOK, response)
 }

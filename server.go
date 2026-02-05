@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v5"
@@ -8,6 +9,12 @@ import (
 )
 
 func main() {
+	// Initialize database
+	if err := InitDB("payslip.db"); err != nil {
+		log.Fatalf("Failed to initialize database: %v", err)
+	}
+	defer CloseDB()
+
 	e := echo.New()
 	e.Use(middleware.RequestLogger())
 
