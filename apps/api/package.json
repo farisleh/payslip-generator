@@ -1,0 +1,10 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "go run .",
+    "build": "go build -o ../../dist/api .",
+    "test": "go test -v ./...",
+    "clean": "rm -rf ../../dist/api"
+  }
+}

@@ -1,3 +1,12 @@
 *.db
 payslip-server
 *.log
+
+# Node
+node_modules
+dist
+.turbo
+.next
+coverage
+.DS_Store
+.env*.local

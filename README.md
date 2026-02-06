@@ -1,6 +1,13 @@
 # Payslip Generator
 
-A REST API service for generating monthly payslips with progressive tax computation.
+A full-stack monorepo application for generating monthly payslips with progressive tax computation.
+
+## 🏗️ Project Structure
+
+This is a Turborepo monorepo containing:
+
+- **apps/api**: Go REST API backend with SQLite database
+- **apps/web**: React frontend with TanStack Router and Tailwind CSS
 
 ## Features
 
@@ -85,40 +92,79 @@ curl http://localhost:1323/payslips
 ## Installation & Running
 
 ### Prerequisites
+- Node.js 18 or higher
 - Go 1.25.7 or higher
 
-### Install Dependencies
+### Quick Start
+
+1. **Install dependencies**
 ```bash
-go mod download
+npm install
 ```
 
-### Run the Server
+2. **Start development servers (both frontend and backend)**
 ```bash
-go run server.go tax.go payslip.go handlers.go database.go
+npm run dev
 ```
 
-The server will start on `http://localhost:1323`
+This will start:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:1323
+
+### Individual App Development
+
+**Frontend only:**
+```bash
+cd apps/web
+npm install
+npm run dev
+```
+
+**Backend only:**
+```bash
+cd apps/api
+go run .
+```
+
+### Build for Production
+
+```bash
+npm run build
+```
 
 ### Run Tests
+
+**All tests:**
 ```bash
+cd apps/api
 go test -v ./...
 ```
 
 ## Project Structure
 
 ```
-.
-├── server.go           # Main server and initialization
-├── tax.go              # Tax bracket structure and computation logic
-├── tax_test.go         # Tests for tax computation
-├── payslip.go          # Payslip generation functions
-├── payslip_test.go     # Tests for payslip generation
-├── handlers.go         # HTTP request handlers
-├── handlers_test.go    # Tests for HTTP handlers
-├── database.go         # Database operations
-├── database_test.go    # Tests for database operations
-├── go.mod              # Go module dependencies
-└── go.sum              # Dependency checksums
+payslip-generator/
+├── apps/
+│   ├── api/              # Go REST API backend
+│   │   ├── server.go
+│   │   ├── tax.go
+│   │   ├── payslip.go
+│   │   ├── handlers.go
+│   │   ├── database.go
+│   │   └── *_test.go
+│   └── web/              # React frontend with TanStack Router
+│       ├── src/
+│       │   ├── routes/
+│       │   │   ├── __root.tsx
+│       │   │   ├── index.tsx      # Generate payslip page
+│       │   │   └── history.tsx    # History page
+│       │   ├── main.tsx
+│       │   └── index.css
+│       ├── vite.config.ts
+│       └── package.json
+├── package.json          # Root monorepo config
+├── turbo.json            # Turborepo configuration
+└── README.md
 ```
 
 ## Design Decisions

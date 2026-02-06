@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	// Initialize database
-	if err := InitDB("payslip.db"); err != nil {
+	// Initialize database with absolute path in the api directory
+	if err := InitDB("./payslip.db"); err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
 	}
 	defer CloseDB()
