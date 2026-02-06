@@ -58,23 +58,22 @@ jobs:
         run: npm run build
         env:
           VITE_API_URL: https://api-production-124c.up.railway.app
+          GITHUB_PAGES: true
 
-      # Uncomment when GitHub Pages is enabled in repo settings
-      # - name: Upload build artifacts
-      #   uses: actions/upload-pages-artifact@v3
-      #   with:
-      #     path: apps/web/dist
+      - name: Upload build artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/web/dist
 
-  # Uncomment when GitHub Pages is enabled
-  # deploy:
-  #   name: Deploy to GitHub Pages
-  #   needs: test-and-build
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: github-pages
-  #     url: ${{ steps.deployment.outputs.page_url }}
-  #   
-  #   steps:
-  #     - name: Deploy to GitHub Pages
-  #       id: deployment
-  #       uses: actions/deploy-pages@v4
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
