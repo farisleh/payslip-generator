@@ -57,8 +57,7 @@ jobs:
         working-directory: apps/web
         run: npm run build
         env:
-          # Point to your deployed API URL (Railway, Render, etc.)
-          VITE_API_URL: https://your-api-url.railway.app
+          VITE_API_URL: https://api-production-124c.up.railway.app
 
       - name: Upload build artifacts
         uses: actions/upload-pages-artifact@v3
