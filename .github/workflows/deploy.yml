@@ -1,0 +1,79 @@
+name: Test and Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  test-and-build:
+    name: Test API and Build Web
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+          cache-dependency-path: apps/api/go.sum
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Go dependencies
+        working-directory: apps/api
+        run: |
+          go mod download
+          go mod verify
+
+      - name: Run Go tests
+        working-directory: apps/api
+        run: go test -v -race -coverprofile=coverage.out ./...
+
+      - name: Check test coverage
+        working-directory: apps/api
+        run: |
+          coverage=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
+          echo "Total coverage: ${coverage}%"
+          if (( $(echo "$coverage < 50" | bc -l) )); then
+            echo "Coverage is below 50%"
+            exit 1
+          fi
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build web app
+        working-directory: apps/web
+        run: npm run build
+        env:
+          # Point to your deployed API URL (Railway, Render, etc.)
+          VITE_API_URL: https://your-api-url.railway.app
+
+      - name: Upload build artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/web/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

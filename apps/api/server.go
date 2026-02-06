@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
@@ -37,7 +38,13 @@ func main() {
 		return HandleExportCSV(c)
 	})
 
-	if err := e.Start(":1323"); err != nil {
+	// Get port from environment or use default
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "1323"
+	}
+
+	if err := e.Start(":" + port); err != nil {
 		e.Logger.Error("failed to start server", "error", err)
 	}
 }

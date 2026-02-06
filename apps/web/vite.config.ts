@@ -15,9 +15,12 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "^/payslip": {
-        target: "http://localhost:1323",
+        target: process.env.VITE_API_URL || "http://localhost:1323",
         changeOrigin: true,
       },
     },
+  },
+  define: {
+    'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || ''),
   },
 });
