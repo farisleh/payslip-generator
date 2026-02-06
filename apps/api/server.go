@@ -32,6 +32,11 @@ func main() {
 		return HandleGetSalaryComputations(c)
 	})
 
+	// Export salary computations as CSV
+	e.GET("/payslips/export", func(c *echo.Context) error {
+		return HandleExportCSV(c)
+	})
+
 	if err := e.Start(":1323"); err != nil {
 		e.Logger.Error("failed to start server", "error", err)
 	}

@@ -14,11 +14,7 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      "/payslip": {
-        target: "http://localhost:1323",
-        changeOrigin: true,
-      },
-      "/payslips": {
+      "^/payslip": {
         target: "http://localhost:1323",
         changeOrigin: true,
       },

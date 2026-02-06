@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/csv"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -97,4 +99,54 @@ func HandleGetSalaryComputations(c *echo.Context) error {
 	}
 
 	return (*c).JSON(http.StatusOK, response)
+}
+
+// HandleExportCSV handles GET /payslips/export endpoint
+func HandleExportCSV(c *echo.Context) error {
+	records, err := GetAllSalaryComputations()
+	if err != nil {
+		return (*c).JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to retrieve salary computations",
+		})
+	}
+
+	// Create CSV buffer
+	buf := new(bytes.Buffer)
+	writer := csv.NewWriter(buf)
+
+	// Write CSV header
+	header := []string{"Timestamp", "Employee Name", "Annual Salary", "Monthly Income Tax"}
+	if err := writer.Write(header); err != nil {
+		return (*c).JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to write CSV header",
+		})
+	}
+
+	// Write CSV rows
+	for _, record := range records {
+		row := []string{
+			record.Timestamp,
+			record.EmployeeName,
+			record.AnnualSalary,
+			record.MonthlyIncomeTax,
+		}
+		if err := writer.Write(row); err != nil {
+			return (*c).JSON(http.StatusInternalServerError, map[string]string{
+				"error": "Failed to write CSV row",
+			})
+		}
+	}
+
+	writer.Flush()
+	if err := writer.Error(); err != nil {
+		return (*c).JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Failed to finalize CSV",
+		})
+	}
+
+	// Set headers for file download
+	(*c).Response().Header().Set("Content-Type", "text/csv")
+	(*c).Response().Header().Set("Content-Disposition", "attachment; filename=salary_computations.csv")
+
+	return (*c).String(http.StatusOK, buf.String())
 }
