@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { getApiUrl } from "../config";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -26,7 +27,7 @@ function Index() {
     setResult(null);
 
     try {
-      const response = await fetch("/payslip", {
+      const response = await fetch(getApiUrl("/payslip"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { getApiUrl } from "../config";
 
 export const Route = createFileRoute("/history")({
   component: History,
@@ -23,7 +24,7 @@ function History() {
 
   const fetchHistory = async () => {
     try {
-      const response = await fetch("/payslips");
+      const response = await fetch(getApiUrl("/payslips"));
 
       if (!response.ok) {
         throw new Error("Failed to fetch history");
@@ -40,7 +41,7 @@ function History() {
 
   const handleExportCSV = async () => {
     try {
-      const response = await fetch("/payslips/export");
+      const response = await fetch(getApiUrl("/payslips/export"));
       if (!response.ok) {
         throw new Error("Failed to export CSV");
       }
